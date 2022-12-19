@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.devfun.settingweb_boot.dao.StatisticMapper">
+ 
+ 	<!-- 해당 연도의 월 로그인 수 -->
+    <select id="selectYearMonthLogin" parameterType="string" resultType="hashMap">
+        select count(*) as totCnt
+        from statistc.requestinfo ri
+        where left(ri.createDate, 4) = #{yearMonth};
+    </select>
+    
+    <!-- 해당 날짜의 로그인 수 -->
+    <select id="selectDateLogin" parameterType="string" resultType="hashMap">
+        select count(*) as totCnt
+        from statistc.requestinfo ri
+        where left(ri.createDate, 6) = #{date};
+    </select>
+    
+    <!-- 해당 연도의 평균 하루 로그인 수 -->
+    <select id="selectYearAverageLogin" parameterType="string" resultType="hashMap">
+        select count(*) as totCnt
+        from statistc.requestinfo ri
+        where left(ri.createDate, 2) = #{year};
+    </select>
+    
+    <!-- 휴일을 제외한 로그인 수 -->
+    <select id="selectExceptionHolidayLogin" resultType="hashMap">
+        select (select count(*) from requestinfo) - count((case 
+        when left(ri.createDate, 6) = left(h.locdate, 6) then 'holiday'
+        end)) as totCnt
+		from requestinfo ri, holiday h;
+    </select>
+    
+    <!-- 해당 부서의 월별 로그인 수 -->
+    <select id="selectOrganiztionMonthLogin" parameterType="string" resultType="hashMap">
+        select count(*) as totCnt
+		from requestinfo ri join user u on ri.userID = u.userID
+		where HR_ORGAN = #{organization} and mid(ri.createDate, 3, 2) = #{month};
+    </select>
+    
+    
+    
+    <!-- 해당 부서의 월별 로그인 수 (group by 사용) -->
+    <select id="selectTest" parameterType="string" resultType="hashMap">
+        select count(*) as totCnt
+		from requestinfo ri join user u on ri.userID = u.userID
+		where mid(ri.createDate, 3, 2) = '06'
+		group by HR_ORGAN;
+    </select>
+    
+    
+    
+</mapper>
