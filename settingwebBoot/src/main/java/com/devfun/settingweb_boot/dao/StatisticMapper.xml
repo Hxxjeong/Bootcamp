@@ -47,7 +47,7 @@
     <select id="selectTest" parameterType="string" resultType="hashMap">
         select count(*) as totCnt
 		from requestinfo ri join user u on ri.userID = u.userID
-		where mid(ri.createDate, 3, 2) = '06'
+		where mid(ri.createDate, 3, 2) = #{month}
 		group by HR_ORGAN;
     </select>
     

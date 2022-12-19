@@ -126,24 +126,19 @@ public class StatisticServiceImpl implements StatisticService {
 
         HashMap<String, Object> retVal = new HashMap<String, Object>();
         List<HashMap> result = new ArrayList<HashMap>();
-        while (retVal != null) {
-        	try {
-                retVal = uMapper.selectTest(month);
-                retVal.put("month", month);
-                retVal.put("is_success", true);
-                
-            }catch(Exception e) {
-                retVal.put("totCnt", -999);
-                retVal.put("month", month);
-                retVal.put("is_success", false);
-            }
-        	result.add(retVal);
-        	if (retVal == null)
-        		break;
+        
+        try {
+            retVal = uMapper.selectTest(month);
+            retVal.put("month", month);
+            retVal.put("is_success", true);
+            
+        }catch(Exception e) {
+            retVal.put("totCnt", -999);
+            retVal.put("month", month);
+            retVal.put("is_success", false);
         }
         
-        
-        
+    	result.add(retVal);
         
         return result;
     }
